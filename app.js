@@ -3,10 +3,12 @@ const express = require("express");
 const mongoose = require("mongoose");
 const passport = require("passport");
 const session = require("express-session");
+const cors = require("cors");
 
 // App and middleware
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 // Express session
 app.use(
@@ -30,7 +32,7 @@ mongoose
 	.catch((err) => console.log(err));
 
 // Routes
-app.use("/users", require("./routes/users.js"));
+app.use("/api/users", require("./routes/users.js"));
 
 // Run server
 const port = process.env.PORT || 5000;
