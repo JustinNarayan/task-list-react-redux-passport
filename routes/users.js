@@ -43,7 +43,7 @@ router.post("/register", async (req, res) => {
 		errMessage = "Failed to contact database";
 		const existingUser = await User.findOne({ username: username });
 		errMessage = "That username is taken";
-		if (existingUser != null) throw "";
+		if (existingUser != null) throw errMessage;
 
 		// Insert newly created user
 		errMessage = "Failed to register user in database";
@@ -51,12 +51,12 @@ router.post("/register", async (req, res) => {
 
 		// Success
 		res.status(201).send({
-			message: "User successfully registered - SHOULD REDIRECT TO LOGIN",
+			text: "User successfully registered",
 			type: "success",
 		});
-	} catch (err) {
+	} catch (caught) {
 		// Send error message to front end
-		res.send({ text: errMessage, err });
+		res.send({ text: errMessage, err: caught });
 	}
 });
 
@@ -79,7 +79,7 @@ router.post("/login", (req, res, next) => {
 
 			// Check for credentials
 			errMessage = "Invalid login credentials";
-			if (!user) throw "";
+			if (!user) throw errMessage;
 			else {
 				// Attempt login
 				req.logIn(user, (err) => {
@@ -89,8 +89,8 @@ router.post("/login", (req, res, next) => {
 					return res.send(user);
 				});
 			}
-		} catch (err) {
-			res.send({ text: errMessage, err });
+		} catch (caught) {
+			res.send({ text: errMessage, err: caught });
 		}
 	})(req, res, next);
 });

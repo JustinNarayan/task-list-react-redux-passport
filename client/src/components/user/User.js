@@ -1,22 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { BiTask, BiUser, BiLock, BiLogInCircle } from "react-icons/bi";
+import { Link } from "react-router-dom";
+import { BiTask, BiUser, BiLock, BiKey, BiLogInCircle } from "react-icons/bi";
 import { ImSpinner2 } from "react-icons/im";
 
-import { login } from "../../store/actions/userActions";
+import { login, register } from "../../store/actions/userActions";
 
 import Alerts from "../layout/Alerts";
 
-const Login = () => {
+const User = ({ mode }) => {
 	const [messages, setMessages] = useState([]);
 
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
+	const [confirmPassword, setConfirmPassword] = useState("");
 
 	const dispatch = useDispatch();
 
-	const userLogin = useSelector((state) => state.userLogin);
-	const { loading, error } = userLogin;
+	const userAuth = useSelector((state) => state.userAuth);
+	const { loading, notification } = userAuth;
 
 	const onSubmit = (e) => {
 		e.preventDefault();
@@ -33,17 +35,35 @@ const Login = () => {
 				text: "Please input your password",
 				type: "warning",
 			});
+		if (mode === "register") {
+			if (!confirmPassword)
+				validationErrors.push({
+					text: "Please confirm your password",
+					type: "warning",
+				});
+			if (password !== confirmPassword)
+				validationErrors.push({
+					text: "Passwords do not match",
+					type: "warning",
+				});
+		}
 
 		/// Push errors to messages
 		setMessages(validationErrors);
 		if (validationErrors.length) return;
 
-		dispatch(login({ username, password }));
+		// Attempt login or registration
+		dispatch(
+			mode === "login"
+				? login({ username, password })
+				: register({ username, password })
+		);
 	};
 
 	useEffect(() => {
-		if (error) setMessages([{ text: error.text, type: "failure" }]);
-	}, [error]);
+		if (notification)
+			setMessages([{ text: notification.text, type: notification.type }]);
+	}, [notification]);
 
 	return (
 		<div className={classes.userCard}>
@@ -55,7 +75,9 @@ const Login = () => {
 			<form className={classes.form} onSubmit={(e) => onSubmit(e)}>
 				<div className={classes.wholeInput}>
 					<label htmlFor="input-username" className={classes.formLabel}>
-						<span className={classes.inputTitle}>Username</span>
+						<span className={classes.inputTitle}>
+							{mode === "register" ? "Set " : ""}Username
+						</span>
 					</label>
 					<span className={classes.inputBox}>
 						<BiUser size={28} className={classes.inputIcon} />
@@ -69,10 +91,16 @@ const Login = () => {
 				</div>
 				<div className={classes.wholeInput}>
 					<label htmlFor="input-password" className={classes.formLabel}>
-						<span className={classes.inputTitle}>Password</span>
+						<span className={classes.inputTitle}>
+							{mode === "register" ? "Set " : ""}Password
+						</span>
 					</label>
 					<span className={classes.inputBox}>
-						<BiLock size={28} className={classes.inputIcon} />
+						{mode === "login" ? (
+							<BiLock size={28} className={classes.inputIcon} />
+						) : (
+							<BiKey size={28} className={classes.inputIcon} />
+						)}
 						<input
 							type="password"
 							id="input-password"
@@ -81,9 +109,31 @@ const Login = () => {
 						/>
 					</span>
 				</div>
+				{mode === "register" && (
+					<div className={classes.wholeInput}>
+						<label
+							htmlFor="input-confirmpassword"
+							className={classes.formLabel}
+						>
+							<span className={classes.inputTitle}>Confirm Password</span>
+						</label>
+						<span className={classes.inputBox}>
+							<BiLock size={28} className={classes.inputIcon} />
+							<input
+								type="password"
+								id="input-confirmpassword"
+								onChange={(e) => setConfirmPassword(e.target.value)}
+								className={classes.input}
+							/>
+						</span>
+					</div>
+				)}
+
 				<button className={classes.button} disabled={loading}>
 					<div className={classes.buttonBox}>
-						<span className={classes.buttonText}>Login</span>
+						<span className={classes.buttonText}>
+							{mode == "login" ? "Login" : "Register"}
+						</span>
 						{loading ? (
 							<ImSpinner2 size={18} className={classes.loading} />
 						) : (
@@ -92,6 +142,21 @@ const Login = () => {
 					</div>
 				</button>
 			</form>
+			{mode === "login" ? (
+				<p className={classes.linkText}>
+					No account?{" "}
+					<Link className={classes.link} to="/register">
+						Register here
+					</Link>
+				</p>
+			) : (
+				<p className={classes.linkText}>
+					Got an account?{" "}
+					<Link className={classes.link} to="/login">
+						Login here
+					</Link>
+				</p>
+			)}
 		</div>
 	);
 };
@@ -115,6 +180,8 @@ const classes = {
 	buttonText: "flex-auto my-auto",
 	buttonIcon: "flex-auto my-auto pt-0.5",
 	loading: "animate-spin text-white my-auto flex-auto ml-1",
+	linkText: "text-sm",
+	link: "underline hover:text-purple-500",
 };
 
-export default Login;
+export default User;
