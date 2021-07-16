@@ -132,7 +132,7 @@ const User = ({ mode }) => {
 				<button className={classes.button} disabled={loading}>
 					<div className={classes.buttonBox}>
 						<span className={classes.buttonText}>
-							{mode == "login" ? "Login" : "Register"}
+							{mode === "login" ? "Login" : "Register"}
 						</span>
 						{loading ? (
 							<ImSpinner2 size={18} className={classes.loading} />
