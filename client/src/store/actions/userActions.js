@@ -19,8 +19,10 @@ export const login =
 				password,
 			});
 
-			console.log(data);
+			if (!data._id) throw data;
 
-			dispatch({ USER_LOGIN_SUCCESS, payload: data });
-		} catch (err) {}
+			dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
+		} catch (err) {
+			dispatch({ type: USER_LOGIN_FAIL, payload: err });
+		}
 	};

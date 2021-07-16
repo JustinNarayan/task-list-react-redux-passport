@@ -56,7 +56,7 @@ router.post("/register", async (req, res) => {
 		});
 	} catch (err) {
 		// Send error message to front end
-		res.send({ message: errMessage, type: "failure", err });
+		res.send({ text: errMessage, err });
 	}
 });
 
@@ -68,22 +68,29 @@ router.post("/register", async (req, res) => {
  */
 
 router.post("/login", (req, res, next) => {
+	// Track errors
+	let errMessage;
+
 	passport.authenticate("local", (err, user) => {
 		try {
+			// Check for authentication errors
+			errMessage = "Failed to attempt authentication";
 			if (err) throw err;
-			if (!user)
-				res.send({ message: "Invalid login credentials", type: "failure" });
+
+			// Check for credentials
+			errMessage = "Invalid login credentials";
+			if (!user) throw "";
 			else {
+				// Attempt login
 				req.logIn(user, (err) => {
+					errMessage = "Failed to login";
 					if (err) throw err;
-					return res.send({
-						message: "Successfully logged in - SHOULD REDIRECT TO DASHBOARD",
-						type: "success",
-					});
+
+					return res.send(user);
 				});
 			}
 		} catch (err) {
-			res.send({ message: "Failed to log in", type: "failure", err });
+			res.send({ text: errMessage, err });
 		}
 	})(req, res, next);
 });
