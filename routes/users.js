@@ -12,9 +12,12 @@ try {
 // Load User model
 const User = require("../models/User");
 
-// Current User
+/**
+ * Returns the current user
+ * @GET /current
+ */
 router.get("/current", (req, res) => {
-	res.send(req.user);
+	return res.json({ user: req.user });
 });
 
 /**
@@ -42,6 +45,7 @@ router.post("/register", async (req, res) => {
 		// Check if username is taken
 		errMessage = "Failed to contact database";
 		const existingUser = await User.findOne({ username: username });
+
 		errMessage = "That username is taken";
 		if (existingUser != null) throw errMessage;
 
@@ -71,26 +75,22 @@ router.post("/login", (req, res, next) => {
 	// Track errors
 	let errMessage;
 
-	passport.authenticate("local", (err, user) => {
+	passport.authenticate("local", (err, user, info) => {
 		try {
-			// Check for authentication errors
 			errMessage = "Failed to attempt authentication";
 			if (err) throw err;
 
-			// Check for credentials
-			errMessage = "Invalid login credentials";
-			if (!user) throw errMessage;
-			else {
-				// Attempt login
-				req.logIn(user, (err) => {
-					errMessage = "Failed to login";
-					if (err) throw err;
+			errMessage = "Failed to find a user";
+			if (!user) throw info.message;
 
-					return res.send(user);
-				});
-			}
-		} catch (caught) {
-			res.send({ text: errMessage, err: caught });
+			req.login(user, (err) => {
+				errMessage = "Failed to login";
+				if (err) throw err;
+
+				return res.json({ text: "Successfully logged in", user });
+			});
+		} catch (err) {
+			return res.json({ text: errMessage, err });
 		}
 	})(req, res, next);
 });
@@ -101,11 +101,11 @@ router.post("/login", (req, res, next) => {
  */
 
 router.get("/logout", (req, res) => {
-	req.logout();
-	res.send({
-		messages: "Successfully logged out - SHOULD REDIRECT TO LOGIN",
-		type: "success",
-	});
+	if (req.user) {
+		req.logout();
+		return res.json({ text: "Logged out" });
+	} else {
+		return res.json({ text: "No account to logout" });
+	}
 });
-
 module.exports = router;

@@ -5,42 +5,28 @@ const bcrypt = require("bcrypt");
 const User = require("../models/User");
 
 module.exports = (passport) => {
-  passport.use(
-    new LocalStrategy(async (username, password, done) => {
-      // Match user
-      const thisUser = await User.findOne({ username });
-      if (!thisUser)
-        return done(null, false, {
-          message: "That username is not registered",
-          type: "failure",
-        });
+	passport.use(
+		new LocalStrategy((username, password, done) => {
+			// Match user
+			User.findOne({ username }).then((user) => {
+				if (!user)
+					return done(null, false, {
+						message: "That username is not registered",
+					});
 
-      // Match password
-      await bcrypt.compare(
-        password,
-        thisUser.password,
-        (err, correctPassword) => {
-          if (err) throw err;
-          if (correctPassword)
-            return done(null, thisUser, {
-              message: "Successful login",
-              type: "success",
-            });
-          else
-            return done(null, false, {
-              message: "Password incorrect",
-              type: "failure",
-            });
-        }
-      );
-    })
-  );
+				// Match password
+				bcrypt.compare(password, user.password, (err, isMatch) => {
+					if (err) throw err;
+					if (isMatch) return done(null, user);
+					else return done(null, false, { message: "Password incorrect" });
+				});
+			});
+		})
+	);
 
-  passport.serializeUser((user, done) => {
-    done(null, user._id);
-  });
+	passport.serializeUser((user, done) => done(null, user._id));
 
-  passport.deserializeUser((_id, done) => {
-    User.findById(_id, (err, user) => done(err, user));
-  });
+	passport.deserializeUser((id, done) =>
+		User.findById(id, (err, user) => done(err, user))
+	);
 };

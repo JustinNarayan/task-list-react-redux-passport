@@ -12,7 +12,7 @@ const Alerts = ({ messages }) => {
 };
 
 const classes = {
-	messages: "w-3/4 mx-auto mb-6",
+	messages: "w-3/4 mx-auto mb-4",
 };
 
 export default Alerts;

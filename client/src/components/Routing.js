@@ -1,15 +1,20 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 
-import User from "../components/user/User";
+import Header from "./layout/Header";
+import User from "./User";
+import Home from "./Home";
 
 const Routing = () => {
 	return (
 		<div className={classes.screen}>
+			<Header />
 			<div className={classes.container}>
 				<Switch>
 					<Route path="/login" render={() => <User mode="login" />} />
 					<Route path="/register" render={() => <User mode="register" />} />
+
+					<Route path="/" exact render={() => <Home />} />
 				</Switch>
 			</div>
 		</div>
