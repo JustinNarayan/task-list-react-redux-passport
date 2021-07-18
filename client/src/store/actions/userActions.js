@@ -51,10 +51,8 @@ export const register =
 	};
 
 export const logout = () => async (dispatch) => {
-	const { data } = await axios.get(`${url}/logout`);
+	await axios.get(`${url}/logout`);
 	dispatch({ type: USER_LOGOUT });
-
-	console.log(data);
 };
 
 export const getUser = () => async (dispatch) => {

@@ -1,25 +1,34 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Redirect } from "react-router-dom";
+import { Link, Redirect, useParams } from "react-router-dom";
 import { BiUser, BiLock, BiKey, BiLogInCircle } from "react-icons/bi";
-import { ImSpinner2 } from "react-icons/im";
 
-import { login, register } from "../store/actions/userActions";
+import { login, register } from "../../store/actions/userActions";
 
-import Alerts from "./layout/Alerts";
+import Alerts from "../utils/Alerts";
+import LoadingSpinner from "../utils/LoadingSpinner";
 
-const User = ({ mode }) => {
-	const [messages, setMessages] = useState([]);
-
+const User = ({ mode, unauthorized = false }) => {
+	/// Set component state variables
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
-
 	const dispatch = useDispatch();
 
-	const userAuth = useSelector((state) => state.userAuth);
-	const { loading, notification, userInfo } = userAuth;
+	/// Check if user has been redirected to login page
+	const redirectMessage = unauthorized
+		? { text: "You are not logged in", type: "failure" }
+		: null;
+	const [messages, setMessages] = useState(
+		redirectMessage ? [redirectMessage] : []
+	);
 
+	// Get global state values
+	const { loading, notification, userInfo } = useSelector(
+		(state) => state.userAuth
+	);
+
+	/// Login/Register submission
 	const onSubmit = (e) => {
 		e.preventDefault();
 
@@ -60,6 +69,12 @@ const User = ({ mode }) => {
 		);
 	};
 
+	/// Reset messages upon component loading (or login/register redirection)
+	useEffect(() => {
+		if (!unauthorized) setMessages([]);
+	}, [mode]);
+
+	/// Show notification upon global state change
 	useEffect(() => {
 		if (notification)
 			setMessages([{ text: notification.text, type: notification.type }]);
@@ -67,7 +82,7 @@ const User = ({ mode }) => {
 
 	return (
 		<>
-			{userInfo && <Redirect to="/" />}
+			{userInfo && <Redirect to="/home" />}
 			<div className={classes.userCard}>
 				<span className={classes.userCardTitle}>
 					{mode === "login" ? "Login" : "Register"}
@@ -133,7 +148,7 @@ const User = ({ mode }) => {
 					<button className={classes.button} disabled={loading}>
 						<div className={classes.buttonBox}>
 							{loading ? (
-								<ImSpinner2 size={18} className={classes.loading} />
+								<LoadingSpinner textColorClass={"text-white"} size={18} />
 							) : (
 								<BiLogInCircle size={22} className={classes.buttonIcon} />
 							)}
@@ -150,7 +165,7 @@ const User = ({ mode }) => {
 				) : (
 					<p className={classes.linkText}>
 						Got an account?{" "}
-						<Link className={classes.link} to="/login">
+						<Link className={classes.link} to="/">
 							Login here
 						</Link>
 					</p>
@@ -162,7 +177,7 @@ const User = ({ mode }) => {
 
 const classes = {
 	userCard:
-		"w-96 md:w-1/2 mx-auto mt-12 rounded-2xl py-8 px-3 border-4 border-purple-200 border-opacity-90 bg-white text-gray-700 filter drop-shadow-md",
+		"w-96 md:w-1/2 mt-6 mx-auto rounded-2xl py-8 px-3 border-4 border-purple-200 border-opacity-90 bg-white text-gray-700 filter drop-shadow-md",
 	userCardTitle: "block mb-6 text-3xl font-semibold",
 	form: "mx-auto w-10/12 lg:w-4/5",
 	wholeInput: "mb-6",
@@ -176,7 +191,6 @@ const classes = {
 	buttonBox: "flex flex-row w-20 py-auto gap-x-0 mx-auto",
 	buttonText: "flex-auto my-auto",
 	buttonIcon: "flex-auto my-auto pt-0.5",
-	loading: "animate-spin text-white my-auto flex-auto ml-1",
 	linkText: "text-sm",
 	link: "underline hover:text-purple-500",
 };

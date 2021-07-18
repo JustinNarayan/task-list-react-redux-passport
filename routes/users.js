@@ -17,7 +17,7 @@ const User = require("../models/User");
  * @GET /current
  */
 router.get("/current", (req, res) => {
-	return res.json({ user: req.user });
+	return res.json({ id: req.user._id, username: req.user.username });
 });
 
 /**
@@ -80,14 +80,17 @@ router.post("/login", (req, res, next) => {
 			errMessage = "Failed to attempt authentication";
 			if (err) throw err;
 
-			errMessage = "Failed to find a user";
+			errMessage = "Invalid email or password";
 			if (!user) throw info.message;
 
 			req.login(user, (err) => {
 				errMessage = "Failed to login";
 				if (err) throw err;
 
-				return res.json({ text: "Successfully logged in", user });
+				return res.json({
+					text: "Successfully logged in",
+					user: { id: req.user._id, username: req.user.username },
+				});
 			});
 		} catch (err) {
 			return res.json({ text: errMessage, err });

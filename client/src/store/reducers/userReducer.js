@@ -26,7 +26,7 @@ export const userAuthReducer = (state = {}, action) => {
 		case USER_GET_FAILURE:
 			return { loading: false, notification: action.payload };
 		case USER_LOGOUT:
-			return {};
+			return { notAuthenticated: true };
 		default:
 			return state;
 	}

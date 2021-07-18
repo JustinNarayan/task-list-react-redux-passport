@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 
 import Header from "./layout/Header";
-import User from "./User";
+import User from "./views/User";
 import Home from "./Home";
 
 const Routing = () => {
@@ -11,10 +11,14 @@ const Routing = () => {
 			<Header />
 			<div className={classes.container}>
 				<Switch>
-					<Route path="/login" render={() => <User mode="login" />} />
+					<Route path="/" exact render={() => <User mode="login" />} />
+					<Route
+						path="/loggedout"
+						render={() => <User mode="login" unauthorized={true} />}
+					/>
 					<Route path="/register" render={() => <User mode="register" />} />
 
-					<Route path="/" exact render={() => <Home />} />
+					<Route path="/home" exact render={() => <Home />} />
 				</Switch>
 			</div>
 		</div>

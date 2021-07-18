@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import Logo from "./Logo";
 
 import { logout } from "../../store/actions/userActions";
@@ -7,15 +7,13 @@ import { logout } from "../../store/actions/userActions";
 const Header = () => {
 	const dispatch = useDispatch();
 
-	const { userInfo } = useSelector((state) => state.userAuth);
-
 	const onLogout = () => {
 		dispatch(logout());
 	};
 
 	return (
 		<div className={classes.header}>
-			<Logo /> {userInfo ? JSON.stringify(userInfo) : ""}
+			<Logo />
 			<button className={classes.logout} onClick={onLogout}>
 				Logout
 			</button>
