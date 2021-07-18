@@ -1,9 +1,9 @@
 import React from "react";
 import Alert from "./Alert";
 
-const Alerts = ({ messages }) => {
+const Alerts = ({ extraClasses, messages }) => {
 	return (
-		<div className={classes.messages}>
+		<div className={`${classes.messages} ${extraClasses}`}>
 			{messages.map((message, index) => (
 				<Alert key={index} text={message.text} type={message.type} />
 			))}
@@ -12,7 +12,7 @@ const Alerts = ({ messages }) => {
 };
 
 const classes = {
-	messages: "w-3/4 mx-auto mb-4",
+	messages: "w-3/4 mx-auto",
 };
 
 export default Alerts;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Redirect, useParams } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { BiUser, BiLock, BiKey, BiLogInCircle } from "react-icons/bi";
 
 import { login, register } from "../../store/actions/userActions";
@@ -72,6 +72,7 @@ const User = ({ mode, unauthorized = false }) => {
 	/// Reset messages upon component loading (or login/register redirection)
 	useEffect(() => {
 		if (!unauthorized) setMessages([]);
+		// eslint-disable-next-line
 	}, [mode]);
 
 	/// Show notification upon global state change
@@ -87,7 +88,7 @@ const User = ({ mode, unauthorized = false }) => {
 				<span className={classes.userCardTitle}>
 					{mode === "login" ? "Login" : "Register"}
 				</span>
-				<Alerts messages={messages} />
+				<Alerts extraClasses={classes.alerts} messages={messages} />
 				<form className={classes.form} onSubmit={(e) => onSubmit(e)}>
 					<div className={classes.wholeInput}>
 						<label htmlFor="input-username" className={classes.formLabel}>
@@ -179,6 +180,7 @@ const classes = {
 	userCard:
 		"w-96 md:w-1/2 mt-6 mx-auto rounded-2xl py-8 px-3 border-4 border-purple-200 border-opacity-90 bg-white text-gray-700 filter drop-shadow-md",
 	userCardTitle: "block mb-6 text-3xl font-semibold",
+	alerts: "mb-4",
 	form: "mx-auto w-10/12 lg:w-4/5",
 	wholeInput: "mb-6",
 	formLabel: "block text-left pl-9 mb-0",

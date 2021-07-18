@@ -58,9 +58,9 @@ router.post("/register", async (req, res) => {
 			text: "User successfully registered",
 			type: "success",
 		});
-	} catch (caught) {
+	} catch (err) {
 		// Send error message to front end
-		res.send({ text: errMessage, err: caught });
+		res.json({ text: errMessage, err });
 	}
 });
 

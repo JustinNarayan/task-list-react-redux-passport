@@ -1,36 +1,43 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { getTasks } from "../../store/actions/taskActions";
 
-import LoadingSpinner from "../utils/LoadingSpinner";
+import Task from "../utils/Task";
 
 const Tasks = () => {
 	const dispatch = useDispatch();
-	const { loading, tasks } = useSelector((state) => state.getTasks);
+	const { tasks } = useSelector((state) => state.getTasks);
 
-	useEffect(() => dispatch(getTasks()), []);
+	useEffect(
+		() => dispatch(getTasks()), // eslint-disable-next-line
+		[]
+	);
+
+	/// Cache tasks on the page to prevent constant loading
+	const [cachedTasks, setCachedTasks] = useState([]);
+	useEffect(() => {
+		if (tasks) {
+			setCachedTasks(tasks);
+			console.log("cached");
+		}
+	}, [tasks]);
 
 	return (
 		<div>
-			{loading ? (
-				<div className={`${classes.generalBox} ${classes.loadingBox}`}>
-					<LoadingSpinner />
-				</div>
-			) : (
-				<></>
-			)}
 			<br />
-			Tasks {JSON.stringify(tasks)}
+			{cachedTasks &&
+				cachedTasks.length &&
+				cachedTasks.map((task) => <Task key={task._id} task={task} />)}
 			<br />
 		</div>
 	);
 };
 
-const classes = {
-	generalBox:
-		"w-min mx-auto rounded-2xl border-4 border-purple-200 border-opacity-90 bg-white text-gray-700 filter drop-shadow-md",
-	loadingBox: "py-4 pl-3 pr-4",
-};
+// const classes = {
+// 	generalBox:
+// 		"w-min mx-auto rounded-2xl border-4 border-purple-200 border-opacity-90 bg-white text-gray-700 filter drop-shadow-md",
+// 	loadingBox: "py-4 pl-3 pr-4",
+// };
 
 export default Tasks;
