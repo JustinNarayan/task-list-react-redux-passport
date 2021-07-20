@@ -34,12 +34,13 @@ const NewTask = ({ toggleModal }) => {
 					/>
 				</div>
 				<form className={classes.form} onSubmit={(e) => onSubmit(e)}>
+					{/* Task Title */}
 					<CustomInput
 						IconElement={MdLabelOutline}
 						inputLabel={"Title"}
 						onChange={(e) => setTitle(e.target.value)}
 					/>
-
+					{/* Task Date */}
 					<FullDateInput
 						onChanges={{
 							setDayFunction: (e) => setDay(e.target.value),
@@ -48,7 +49,7 @@ const NewTask = ({ toggleModal }) => {
 						}}
 						stateValues={{ month: month, year: year }}
 					/>
-
+					{/* Task Time - Optional */}
 					<CustomInput
 						IconElement={MdAccessTime}
 						inputLabel="Time"
@@ -58,7 +59,7 @@ const NewTask = ({ toggleModal }) => {
 						hasIncludeCheckbox={true}
 						includeFunction={(e) => setIncludeTime(e.target.checked)}
 					/>
-
+					{/* Task Location - Optional */}
 					<CustomInput
 						IconElement={MdLocationOn}
 						inputLabel="Location"

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { MdCheckBox, MdCheckBoxOutlineBlank, MdSettings } from "react-icons/md";
 
+import { months, formattedDay } from "../../constants/datetimeConstants";
+
 import { updateTask } from "../../store/actions/taskActions";
 
 import Alerts from "../utils/Alerts";
@@ -9,32 +11,6 @@ import Alerts from "../utils/Alerts";
 const Task = ({ task: { _id, title, date, time, location, completed } }) => {
 	const [localCompleted, setLocalCompleted] = useState(completed);
 
-	const months = [
-		"January",
-		"February",
-		"March",
-		"April",
-		"May",
-		"June",
-		"July",
-		"August",
-		"September",
-		"October",
-		"November",
-		"December",
-	];
-	const formattedDay = (dayOfMonth) => {
-		switch (dayOfMonth % 10) {
-			case 1:
-				return dayOfMonth + "st";
-			case 2:
-				return dayOfMonth + "nd";
-			case 3:
-				return dayOfMonth + "rd";
-			default:
-				return dayOfMonth + "th";
-		}
-	};
 	const taskDate = new Date(date);
 
 	const dispatch = useDispatch();

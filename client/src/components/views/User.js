@@ -8,7 +8,6 @@ import { login, register } from "../../store/actions/userActions";
 import Alerts from "../utils/Alerts";
 import LoadingSpinner from "../utils/LoadingSpinner";
 import CustomInput from "../utils/forms/CustomInput";
-import { set } from "mongoose";
 
 const User = ({ mode, unauthorized = false }) => {
 	/// Set component state variables
@@ -92,19 +91,20 @@ const User = ({ mode, unauthorized = false }) => {
 				</span>
 				<Alerts extraClasses={classes.alerts} messages={messages} />
 				<form className={classes.form} onSubmit={(e) => onSubmit(e)}>
+					{/* (Set) Username */}
 					<CustomInput
 						IconElement={BiUser}
 						inputLabel={`${mode === "register" ? "Set " : ""} Username`}
 						onChange={(e) => setUsername(e.target.value)}
 					/>
-
+					{/* (Set) Password */}
 					<CustomInput
 						IconElement={mode === "login" ? BiLock : BiKey}
 						inputLabel={`${mode === "register" ? "Set " : ""} Password`}
 						inputType="password"
 						onChange={(e) => setPassword(e.target.value)}
 					/>
-
+					{/* Confirm Password (for registration) */}
 					{mode === "register" && (
 						<CustomInput
 							IconElement={BiLock}
@@ -113,7 +113,6 @@ const User = ({ mode, unauthorized = false }) => {
 							onChange={(e) => setConfirmPassword(e.target.value)}
 						/>
 					)}
-
 					<button className={classes.button} disabled={loading}>
 						<div className={classes.buttonBox}>
 							{loading ? (
