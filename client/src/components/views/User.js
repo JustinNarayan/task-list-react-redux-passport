@@ -7,6 +7,8 @@ import { login, register } from "../../store/actions/userActions";
 
 import Alerts from "../utils/Alerts";
 import LoadingSpinner from "../utils/LoadingSpinner";
+import CustomInput from "../utils/forms/CustomInput";
+import { set } from "mongoose";
 
 const User = ({ mode, unauthorized = false }) => {
 	/// Set component state variables
@@ -90,60 +92,26 @@ const User = ({ mode, unauthorized = false }) => {
 				</span>
 				<Alerts extraClasses={classes.alerts} messages={messages} />
 				<form className={classes.form} onSubmit={(e) => onSubmit(e)}>
-					<div className={classes.wholeInput}>
-						<label htmlFor="input-username" className={classes.formLabel}>
-							<span className={classes.inputTitle}>
-								{mode === "register" ? "Set " : ""}Username
-							</span>
-						</label>
-						<span className={classes.inputBox}>
-							<BiUser size={28} className={classes.inputIcon} />
-							<input
-								type="text"
-								id="input-username"
-								onChange={(e) => setUsername(e.target.value)}
-								className={classes.input}
-							/>
-						</span>
-					</div>
-					<div className={classes.wholeInput}>
-						<label htmlFor="input-password" className={classes.formLabel}>
-							<span className={classes.inputTitle}>
-								{mode === "register" ? "Set " : ""}Password
-							</span>
-						</label>
-						<span className={classes.inputBox}>
-							{mode === "login" ? (
-								<BiLock size={28} className={classes.inputIcon} />
-							) : (
-								<BiKey size={28} className={classes.inputIcon} />
-							)}
-							<input
-								type="password"
-								id="input-password"
-								onChange={(e) => setPassword(e.target.value)}
-								className={classes.input}
-							/>
-						</span>
-					</div>
+					<CustomInput
+						IconElement={BiUser}
+						inputLabel={`${mode === "register" ? "Set " : ""} Username`}
+						onChange={(e) => setUsername(e.target.value)}
+					/>
+
+					<CustomInput
+						IconElement={mode === "login" ? BiLock : BiKey}
+						inputLabel={`${mode === "register" ? "Set " : ""} Password`}
+						inputType="password"
+						onChange={(e) => setPassword(e.target.value)}
+					/>
+
 					{mode === "register" && (
-						<div className={classes.wholeInput}>
-							<label
-								htmlFor="input-confirmpassword"
-								className={classes.formLabel}
-							>
-								<span className={classes.inputTitle}>Confirm Password</span>
-							</label>
-							<span className={classes.inputBox}>
-								<BiLock size={28} className={classes.inputIcon} />
-								<input
-									type="password"
-									id="input-confirmpassword"
-									onChange={(e) => setConfirmPassword(e.target.value)}
-									className={classes.input}
-								/>
-							</span>
-						</div>
+						<CustomInput
+							IconElement={BiLock}
+							inputLabel="Confirm Password"
+							inputType="password"
+							onChange={(e) => setConfirmPassword(e.target.value)}
+						/>
 					)}
 
 					<button className={classes.button} disabled={loading}>
@@ -182,13 +150,6 @@ const classes = {
 	userCardTitle: "block mb-6 text-3xl font-semibold uppercase",
 	alerts: "mb-4",
 	form: "mx-auto w-10/12 lg:w-4/5",
-	wholeInput: "mb-6",
-	formLabel: "block text-left pl-9 mb-0",
-	inputTitle: "text-sm font-light justify-left",
-	inputBox: "flex flex-row justify-start",
-	inputIcon: "mr-2 my-auto rounded-lg p-0.5",
-	input:
-		"mr-1 py-0.5 px-1 block w-full outline-none border-0 border-b-2 border-gray-200 text-base text-gray-700 focus:ring-0 focus:border-black focus:bg-purple-50 font-normal",
 	button: "rounded-xl bg-purple-500 text-white w-11/12 h-10 mt-8 mb-4",
 	buttonBox: "flex flex-row w-20 py-auto gap-x-0 mx-auto",
 	buttonText: "flex-auto my-auto",
