@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 
 import Logo from "./Logo";
 import ModalContainer from "../utils/ModalContainer";
+import NewTask from "../views/NewTask";
 
 import { logout } from "../../store/actions/userActions";
 
@@ -24,7 +25,7 @@ const Header = () => {
 
 	const [showNewTaskModal, setShowNewtaskModal] = useState(false);
 
-	const toggleModal = () => setShowNewtaskModal(!showNewTaskModal);
+	const toggleNewTaskModal = () => setShowNewtaskModal(!showNewTaskModal);
 
 	const dispatch = useDispatch();
 
@@ -40,12 +41,13 @@ const Header = () => {
 					<div
 						className={`${classes.buttonContainer} ${classes.nonLastButton}`}
 					>
-						<button className={classes.button} onClick={toggleModal}>
+						<button className={classes.button} onClick={toggleNewTaskModal}>
 							New Task
 						</button>
 						<ModalContainer
-							toggleModal={toggleModal}
+							toggleModal={toggleNewTaskModal}
 							modalState={showNewTaskModal}
+							childModal={<NewTask toggleModal={toggleNewTaskModal} />}
 						/>
 					</div>
 				)}

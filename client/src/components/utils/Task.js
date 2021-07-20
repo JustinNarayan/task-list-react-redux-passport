@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { MdCheckBox, MdCheckBoxOutlineBlank, MdSettings } from "react-icons/md";
 
@@ -99,7 +99,7 @@ const Task = ({ task: { _id, title, date, time, location, completed } }) => {
 
 const classes = {
 	taskCard:
-		"flex flex-col w-96 sm:w-4/5 lg:w-2/3 mx-auto rounded-2xl border-4 border-purple-200 border-opacity-90 bg-white text-gray-700 filter drop-shadow",
+		"flex flex-col w-96 sm:w-4/5 lg:w-3/4 mx-auto rounded-2xl border-4 border-purple-200 border-opacity-90 bg-white text-gray-700 filter drop-shadow",
 	taskContents: "flex px-2 pr-8 gap-x-2",
 	alerts: "mt-5 -mb-1 w-10/12",
 	checkIcon: "text-purple-800 my-auto px-4",
