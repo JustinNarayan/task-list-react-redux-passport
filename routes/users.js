@@ -17,7 +17,9 @@ const User = require("../models/User");
  * @GET /current
  */
 router.get("/current", (req, res) => {
-	return res.json({ id: req.user._id, username: req.user.username });
+	return res
+		.status(404)
+		.json({ id: req.user._id, username: req.user.username });
 });
 
 /**
@@ -60,7 +62,7 @@ router.post("/register", async (req, res) => {
 		});
 	} catch (err) {
 		// Send error message to front end
-		res.json({ text: errMessage, err });
+		res.status(400).json({ text: errMessage, err });
 	}
 });
 
@@ -93,7 +95,7 @@ router.post("/login", (req, res, next) => {
 				});
 			});
 		} catch (err) {
-			return res.json({ text: errMessage, err });
+			return res.status(404).json({ text: errMessage, err });
 		}
 	})(req, res, next);
 });

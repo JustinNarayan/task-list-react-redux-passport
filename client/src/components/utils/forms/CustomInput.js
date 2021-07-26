@@ -8,6 +8,7 @@ const CustomInput = ({
 	inputOptionsObject = {},
 	disabledState = false,
 	hasIncludeCheckbox = false,
+	defaultChecked = false,
 	includeFunction = () => {},
 }) => {
 	return (
@@ -36,7 +37,7 @@ const CustomInput = ({
 								type="checkbox"
 								id={`include${inputLabel}`}
 								className={classes.checkbox}
-								defaultChecked={false}
+								defaultChecked={defaultChecked}
 								onChange={includeFunction}
 							/>
 							<label
@@ -54,11 +55,11 @@ const CustomInput = ({
 };
 
 const classes = {
-	wholeInput: "mb-4",
+	wholeInput: "mb-3",
 	formLabel: "block text-left pl-7 -mb-0.5",
 	inputTitle: "text-sm font-light justify-left",
 	inputBox: "flex flex-row justify-start -ml-0.5 mr-2.5 -pl-4",
-	inputIcon: "mr-1.5 my-auto rounded-lg flex-initial",
+	inputIcon: "mr-2 my-auto rounded-lg flex-initial",
 	emptyIcon: "mr-5 text-base select-none text-white",
 	input:
 		"disabled:bg-gray-100 py-0.5 block w-full px-1 outline-none border-0 border-b-2 border-gray-200 text-sm text-gray-700 focus:ring-0 focus:border-black focus:bg-purple-50 font-normal",

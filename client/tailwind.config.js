@@ -13,6 +13,9 @@ module.exports = {
 	variants: {
 		extend: {
 			backgroundColor: ["disabled"],
+			ringColor: ["hover", "disabled"],
+			ringWidth: ["hover", "disabled"],
+			cursor: ["disabled"],
 		},
 	},
 	plugins: [require("@tailwindcss/custom-forms")],

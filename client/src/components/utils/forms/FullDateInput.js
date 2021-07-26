@@ -11,6 +11,9 @@ const FullDateInput = ({
 	onChanges: { setDayFunction, setMonthFunction, setYearFunction },
 	stateValues: { month, year },
 	inputIdentifier = "", // in case several date inputs have to be rendered
+	defaultDayValue = null,
+	defaultMonthValue = null,
+	defaultYearValue = new Date().getFullYear(),
 }) => {
 	return (
 		<div className={classes.wholeInput}>
@@ -25,6 +28,7 @@ const FullDateInput = ({
 							id={`input-day-${inputIdentifier}`}
 							onChange={setDayFunction}
 							className={classes.select}
+							defaultValue={defaultDayValue}
 						>
 							{[...Array(daysInMonth(year, month))].map((nullValue, index) => (
 								<option
@@ -43,6 +47,7 @@ const FullDateInput = ({
 							id={`input-month-${inputIdentifier}`}
 							onChange={setMonthFunction}
 							className={classes.select}
+							defaultValue={defaultMonthValue}
 						>
 							{[...Array(months.length)].map((nullValue, index) => (
 								<option
@@ -61,8 +66,8 @@ const FullDateInput = ({
 						id={`input-year-${inputIdentifier}`}
 						onChange={setYearFunction}
 						className={classes.input}
-						min={new Date().getFullYear()}
-						defaultValue={new Date().getFullYear()}
+						min={Math.min(new Date().getFullYear(), defaultYearValue)}
+						defaultValue={defaultYearValue}
 					/>
 				</div>
 			</span>
@@ -75,7 +80,7 @@ const classes = {
 	formLabel: "block text-left pl-7 -mb-0.5",
 	inputTitle: "text-sm font-light justify-left",
 	inputBox: "flex flex-row justify-start -ml-0.5 mr-2.5 -pl-4",
-	inputIcon: "mr-1.5 my-auto rounded-lg flex-initial",
+	inputIcon: "mr-2 my-auto rounded-lg flex-initial",
 	inputSet: "flex flex-row w-full gap-x-3",
 	input:
 		"disabled:bg-gray-100 py-0.5 block w-full px-1 outline-none border-0 border-b-2 border-gray-200 text-sm text-gray-700 focus:ring-0 focus:border-black focus:bg-purple-50 font-normal",

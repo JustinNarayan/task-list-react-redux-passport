@@ -6,7 +6,7 @@ import { BiUser, BiLock, BiKey, BiLogInCircle } from "react-icons/bi";
 import { login, register } from "../../store/actions/userActions";
 
 import Alerts from "../utils/Alerts";
-import LoadingSpinner from "../utils/LoadingSpinner";
+import CustomSubmit from "../utils/forms/CustomSubmit";
 import CustomInput from "../utils/forms/CustomInput";
 
 const User = ({ mode, unauthorized = false }) => {
@@ -113,15 +113,7 @@ const User = ({ mode, unauthorized = false }) => {
 							onChange={(e) => setConfirmPassword(e.target.value)}
 						/>
 					)}
-					<button className={classes.button} disabled={loading}>
-						<div className={classes.buttonBox}>
-							{loading ? (
-								<LoadingSpinner textColorClass={"text-white"} size={18} />
-							) : (
-								<BiLogInCircle size={22} className={classes.buttonIcon} />
-							)}
-						</div>
-					</button>
+					<CustomSubmit loadingState={loading} IconElement={BiLogInCircle} />
 				</form>
 				{mode === "login" ? (
 					<p className={classes.linkText}>
@@ -147,12 +139,8 @@ const classes = {
 	userCard:
 		"w-96 md:w-1/2 mt-6 mx-auto rounded-2xl py-8 px-3 border-4 border-purple-200 border-opacity-90 bg-white text-gray-700 filter drop-shadow-md",
 	userCardTitle: "block mb-6 text-3xl font-semibold uppercase",
-	alerts: "mb-4",
+	alerts: "w-9/12 mb-4",
 	form: "mx-auto w-10/12 lg:w-4/5",
-	button: "rounded-xl bg-purple-500 text-white w-11/12 h-10 mt-8 mb-4",
-	buttonBox: "flex flex-row w-20 py-auto gap-x-0 mx-auto",
-	buttonText: "flex-auto my-auto",
-	buttonIcon: "flex-auto my-auto pt-0.5",
 	linkText: "text-sm",
 	link: "underline hover:text-purple-500",
 };

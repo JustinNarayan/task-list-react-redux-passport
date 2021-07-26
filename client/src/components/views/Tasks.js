@@ -19,7 +19,6 @@ const Tasks = () => {
 	useEffect(() => {
 		if (tasks) {
 			setCachedTasks(tasks);
-			console.log("cached");
 		}
 	}, [tasks]);
 

@@ -6,6 +6,11 @@ import {
 	TASK_UPDATE_REQUEST,
 	TASK_UPDATE_SUCCESS,
 	TASK_UPDATE_FAILURE,
+	TASK_UPDATE_CLEAR_NOTIFICATION,
+	TASK_CREATE_REQUEST,
+	TASK_CREATE_SUCCESS,
+	TASK_CREATE_FAILURE,
+	TASK_CREATE_CLEAR_NOTIFICATION,
 } from "../../constants/taskConstants";
 
 import checkAuth from "./checkAuthActions";
@@ -29,6 +34,25 @@ export const getTasks = () => async (dispatch) => {
 	}
 };
 
+export const createTask = (taskParameters) => async (dispatch) => {
+	try {
+		dispatch({ type: TASK_CREATE_REQUEST });
+
+		const { data } = await axios.post(`${url}`, taskParameters);
+
+		checkAuth(data, dispatch);
+
+		if (data.err) throw data;
+
+		dispatch({ type: TASK_CREATE_SUCCESS, payload: data });
+
+		// Fetch tasks
+		dispatch(getTasks());
+	} catch (caught) {
+		dispatch({ type: TASK_CREATE_FAILURE, payload: caught });
+	}
+};
+
 export const updateTask =
 	({ id, updatedParameters }) =>
 	async (dispatch) => {
@@ -43,9 +67,14 @@ export const updateTask =
 
 			dispatch({ type: TASK_UPDATE_SUCCESS, payload: data });
 
-			// Refetch tasks to see updated
+			// Fetch tasks
 			dispatch(getTasks());
 		} catch (caught) {
 			dispatch({ type: TASK_UPDATE_FAILURE, payload: caught });
 		}
 	};
+
+export const clearTaskNotifications = () => async (dispatch) => {
+	dispatch({ type: TASK_CREATE_CLEAR_NOTIFICATION });
+	dispatch({ type: TASK_UPDATE_CLEAR_NOTIFICATION });
+};

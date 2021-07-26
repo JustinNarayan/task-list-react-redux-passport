@@ -19,7 +19,52 @@ router.get("/", ensureAuthenticated, async (req, res) => {
 		// Retrieve tasks from database
 		errMessage = "Failed to contact database";
 		const tasks = await Task.find({ userID: req.user._id });
-		res.json(tasks);
+
+		res.json(
+			tasks.sort((a, b) => a.completed - b.completed || b.date - a.date)
+		);
+	} catch (err) {
+		res.status(404).json({ text: errMessage, err });
+	}
+});
+
+/**
+ * Creates a new task for a given user
+ * @POST /
+ * @body title (string)
+ * @body date (valid date string from Date(year, monthIndex, day) constructor)
+ * @body time (valid time string hh:mm in 24 hour time)
+ * @body location (string)
+ *
+ */
+
+router.post("/", ensureAuthenticated, async (req, res) => {
+	// Deconstruct request
+	const { title, date, time, location } = req.body;
+
+	// Track errors
+	let errMessage;
+
+	try {
+		// Create task in database
+		errMessage = "Failed to contact database";
+		const task = new Task({
+			title,
+			date,
+			time,
+			location,
+			completed: false,
+			userID: req.user._id,
+		});
+
+		const createdTask = await task.save();
+
+		// Send response
+		res.status(201).json({
+			text: "Successfully created task",
+			type: "success",
+			created: createdTask,
+		});
 	} catch (err) {
 		res.json({ text: errMessage, err });
 	}
@@ -28,6 +73,11 @@ router.get("/", ensureAuthenticated, async (req, res) => {
 /**
  * Edits the values of an existing task
  * @PUT /:id
+ * @body title (string) [optional]
+ * @body date (valid date string) [optional]
+ * @body time (valid time string hh:mm am/pm) [optional]
+ * @body location (string) [optional]
+ * @body completed (boolean) [optional]
  *
  */
 router.put("/:id", ensureAuthenticated, async (req, res) => {
@@ -52,6 +102,8 @@ router.put("/:id", ensureAuthenticated, async (req, res) => {
 				useFindAndModify: false, // deprecation
 			}
 		);
+
+		// Send response
 		res.json({
 			text: "Successfully updated task",
 			type: "success",
@@ -59,7 +111,7 @@ router.put("/:id", ensureAuthenticated, async (req, res) => {
 			effectedTask: id,
 		});
 	} catch (err) {
-		res.json({ text: errMessage, err, effectedTask: id });
+		res.status(404).json({ text: errMessage, err, effectedTask: id });
 	}
 });
 
