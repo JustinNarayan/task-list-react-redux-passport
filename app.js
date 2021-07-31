@@ -7,7 +7,7 @@ const session = require("express-session");
 const cors = require("cors");
 
 // Connect to MongoDB
-const db = require("./config/keys").mongoURI;
+const db = process.env.mongoURI || require("./config/keys").mongoURI;
 mongoose
 	.connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
 	.then(() => console.log("MongoDB Connected"))
@@ -27,12 +27,16 @@ app.use(
 // Express session
 app.use(
 	session({
-		secret: require("./config/keys").sessionSecret,
+		secret: process.env.SESSIONSECRET || require("./config/keys").sessionSecret,
 		resave: true,
 		saveUninitialized: true,
 	})
 );
-app.use(cookieParser(require("./config/keys").sessionSecret));
+app.use(
+	cookieParser(
+		process.env.SESSIONSECRET || require("./config/keys").sessionSecret
+	)
+);
 
 // Passport config
 app.use(passport.initialize());
