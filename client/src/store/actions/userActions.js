@@ -12,7 +12,7 @@ import {
 	USER_GET_FAILURE,
 } from "../../constants/userConstants";
 
-const url = `/api/users`;
+const url = `http://localhost:5000/api/users`;
 axios.defaults.withCredentials = true;
 
 export const login =

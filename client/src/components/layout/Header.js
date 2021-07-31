@@ -38,24 +38,26 @@ const Header = () => {
 			<Logo />
 			<div className={classes.buttonBar}>
 				{showHeaderButtons && (
-					<div
-						className={`${classes.buttonContainer} ${classes.nonLastButton}`}
-					>
-						<button className={classes.button} onClick={toggleNewTaskModal}>
-							New Task
-						</button>
-						<ModalContainer
-							toggleModal={toggleNewTaskModal}
-							modalState={showNewTaskModal}
-							childModal={<NewTask toggleModal={toggleNewTaskModal} />}
-						/>
-					</div>
+					<>
+						<div
+							className={`${classes.buttonContainer} ${classes.nonLastButton}`}
+						>
+							<button className={classes.button} onClick={toggleNewTaskModal}>
+								New Task
+							</button>
+							<ModalContainer
+								toggleModal={toggleNewTaskModal}
+								modalState={showNewTaskModal}
+								childModal={<NewTask toggleModal={toggleNewTaskModal} />}
+							/>
+						</div>
+						<div className={classes.buttonContainer}>
+							<button className={classes.button} onClick={onLogout}>
+								Logout
+							</button>
+						</div>
+					</>
 				)}
-				<div className={classes.buttonContainer}>
-					<button className={classes.button} onClick={onLogout}>
-						Logout
-					</button>
-				</div>
 			</div>
 		</div>
 	);

@@ -19,7 +19,7 @@ import {
 
 import checkAuth from "./checkAuthActions";
 
-const url = `/api/tasks`;
+const url = `http://localhost:5000/api/tasks`;
 axios.defaults.withCredentials = true;
 
 export const getTasks = () => async (dispatch) => {

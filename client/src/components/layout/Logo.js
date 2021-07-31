@@ -12,7 +12,7 @@ const Logo = () => {
 
 const classes = {
 	title:
-		"flex flex-row justify-center font-semibold content-center text-center gap-x-2 text-3xl",
+		"flex flex-row justify-center font-semibold content-center text-center gap-x-2 text-3xl select-none cursor-default",
 	icon: "my-auto pt-1",
 };
 

@@ -28,7 +28,7 @@ const FullDateInput = ({
 							id={`input-day-${inputIdentifier}`}
 							onChange={setDayFunction}
 							className={classes.select}
-							defaultValue={defaultDayValue}
+							defaultValue={parseInt(defaultDayValue)}
 						>
 							{[...Array(daysInMonth(year, month))].map((nullValue, index) => (
 								<option
@@ -47,7 +47,7 @@ const FullDateInput = ({
 							id={`input-month-${inputIdentifier}`}
 							onChange={setMonthFunction}
 							className={classes.select}
-							defaultValue={defaultMonthValue}
+							defaultValue={parseInt(defaultMonthValue)}
 						>
 							{[...Array(months.length)].map((nullValue, index) => (
 								<option

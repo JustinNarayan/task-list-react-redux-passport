@@ -21,7 +21,7 @@ router.get("/", ensureAuthenticated, async (req, res) => {
 		const tasks = await Task.find({ userID: req.user._id });
 
 		res.json(
-			tasks.sort((a, b) => a.completed - b.completed || b.date - a.date)
+			tasks.sort((a, b) => a.completed - b.completed || a.date - b.date)
 		);
 	} catch (err) {
 		res.status(404).json({ text: errMessage, err });
