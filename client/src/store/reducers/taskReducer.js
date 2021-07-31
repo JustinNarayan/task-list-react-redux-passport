@@ -10,6 +10,10 @@ import {
 	TASK_CREATE_SUCCESS,
 	TASK_CREATE_FAILURE,
 	TASK_CREATE_CLEAR_NOTIFICATION,
+	TASK_DELETE_REQUEST,
+	TASK_DELETE_SUCCESS,
+	TASK_DELETE_FAILURE,
+	TASK_DELETE_CLEAR_NOTIFICATION,
 } from "../../constants/taskConstants";
 
 export const getTasksReducer = (state = {}, action) => {
@@ -50,6 +54,21 @@ export const updateTaskReducer = (state = {}, action) => {
 		case TASK_UPDATE_FAILURE:
 			return { loading: false, notification: action.payload };
 		case TASK_UPDATE_CLEAR_NOTIFICATION:
+			return { notification: {} };
+		default:
+			return state;
+	}
+};
+
+export const deleteTaskReducer = (state = {}, action) => {
+	switch (action.type) {
+		case TASK_DELETE_REQUEST:
+			return { loading: true };
+		case TASK_DELETE_SUCCESS:
+			return { loading: false }; // no notification
+		case TASK_DELETE_FAILURE:
+			return { loading: false, notification: action.payload };
+		case TASK_DELETE_CLEAR_NOTIFICATION:
 			return { notification: {} };
 		default:
 			return state;

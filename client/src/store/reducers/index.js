@@ -4,6 +4,7 @@ import {
 	getTasksReducer,
 	createTaskReducer,
 	updateTaskReducer,
+	deleteTaskReducer,
 } from "./taskReducer";
 
 export default combineReducers({
@@ -11,4 +12,5 @@ export default combineReducers({
 	getTasks: getTasksReducer,
 	createTask: createTaskReducer,
 	updateTask: updateTaskReducer,
+	deleteTask: deleteTaskReducer,
 });

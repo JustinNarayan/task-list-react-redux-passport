@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import {
 	MdCheckBox,
 	MdCheckBoxOutlineBlank,
+	MdBuild,
 	MdDelete,
-	MdSettings,
 } from "react-icons/md";
 
 import { months, formattedDay } from "../../constants/datetimeConstants";
@@ -14,6 +14,7 @@ import { updateTask } from "../../store/actions/taskActions";
 import Alerts from "../utils/Alerts";
 import ModalContainer from "./ModalContainer";
 import UpdateTask from "../views/UpdateTask";
+import DeleteTask from "../views/DeleteTask";
 
 const Task = ({ task: { _id, title, date, time, location, completed } }) => {
 	const [localCompleted, setLocalCompleted] = useState(completed);
@@ -33,6 +34,10 @@ const Task = ({ task: { _id, title, date, time, location, completed } }) => {
 	const [showUpdateTaskModal, setShowUpdateTaskModal] = useState(false);
 	const toggleUpdateTaskModal = () =>
 		setShowUpdateTaskModal(!showUpdateTaskModal);
+
+	const [showDeleteTaskModal, setShowDeleteTaskModal] = useState(false);
+	const toggleDeleteTaskModal = () =>
+		setShowDeleteTaskModal(!showDeleteTaskModal);
 
 	const formatTime = () => {
 		const [hour, minutes] = time.split(":");
@@ -55,6 +60,19 @@ const Task = ({ task: { _id, title, date, time, location, completed } }) => {
 							oldDate: date,
 							oldTime: time,
 							oldLocation: location,
+						}}
+					/>
+				}
+			/>
+			<ModalContainer
+				toggleModal={toggleDeleteTaskModal}
+				modalState={showDeleteTaskModal}
+				childModal={
+					<DeleteTask
+						toggleModal={toggleDeleteTaskModal}
+						task={{
+							id: _id,
+							title,
 						}}
 					/>
 				}
@@ -92,15 +110,15 @@ const Task = ({ task: { _id, title, date, time, location, completed } }) => {
 						<div className={classes.taskTitleBar}>
 							<p className={classes.taskTitle}>{title}</p>
 							<div className={classes.taskIcons}>
-								<MdDelete
+								<MdBuild
 									size={32}
 									className={classes.taskIcon}
 									onClick={toggleUpdateTaskModal}
 								/>
-								<MdSettings
+								<MdDelete
 									size={32}
 									className={classes.taskIcon}
-									onClick={toggleUpdateTaskModal}
+									onClick={toggleDeleteTaskModal}
 								/>
 							</div>
 						</div>

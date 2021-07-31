@@ -77,7 +77,7 @@ const UpdateTask = ({
 		};
 
 		// Attempt to create task
-		dispatch(updateTask({ id: oldID, updatedParameters }));
+		dispatch(updateTask(oldID, updatedParameters));
 	};
 
 	/// Show notification upon global state change

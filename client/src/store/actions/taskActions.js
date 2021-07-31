@@ -11,6 +11,10 @@ import {
 	TASK_CREATE_SUCCESS,
 	TASK_CREATE_FAILURE,
 	TASK_CREATE_CLEAR_NOTIFICATION,
+	TASK_DELETE_REQUEST,
+	TASK_DELETE_SUCCESS,
+	TASK_DELETE_FAILURE,
+	TASK_DELETE_CLEAR_NOTIFICATION,
 } from "../../constants/taskConstants";
 
 import checkAuth from "./checkAuthActions";
@@ -53,28 +57,46 @@ export const createTask = (taskParameters) => async (dispatch) => {
 	}
 };
 
-export const updateTask =
-	({ id, updatedParameters }) =>
-	async (dispatch) => {
-		try {
-			dispatch({ type: TASK_UPDATE_REQUEST });
+export const updateTask = (id, updatedParameters) => async (dispatch) => {
+	try {
+		dispatch({ type: TASK_UPDATE_REQUEST });
 
-			const { data } = await axios.put(`${url}/${id}`, updatedParameters);
+		const { data } = await axios.put(`${url}/${id}`, updatedParameters);
 
-			checkAuth(data, dispatch);
+		checkAuth(data, dispatch);
 
-			if (data.err) throw data;
+		if (data.err) throw data;
 
-			dispatch({ type: TASK_UPDATE_SUCCESS, payload: data });
+		dispatch({ type: TASK_UPDATE_SUCCESS, payload: data });
 
-			// Fetch tasks
-			dispatch(getTasks());
-		} catch (caught) {
-			dispatch({ type: TASK_UPDATE_FAILURE, payload: caught });
-		}
-	};
+		// Fetch tasks
+		dispatch(getTasks());
+	} catch (caught) {
+		dispatch({ type: TASK_UPDATE_FAILURE, payload: caught });
+	}
+};
+
+export const deleteTask = (id) => async (dispatch) => {
+	try {
+		dispatch({ type: TASK_DELETE_REQUEST });
+
+		const { data } = await axios.delete(`${url}/${id}`);
+
+		checkAuth(data, dispatch);
+
+		if (data.err) throw data;
+
+		dispatch({ type: TASK_DELETE_SUCCESS, payload: data });
+
+		// Fetch tasks
+		dispatch(getTasks());
+	} catch (caught) {
+		dispatch({ type: TASK_DELETE_FAILURE, payload: caught });
+	}
+};
 
 export const clearTaskNotifications = () => async (dispatch) => {
 	dispatch({ type: TASK_CREATE_CLEAR_NOTIFICATION });
 	dispatch({ type: TASK_UPDATE_CLEAR_NOTIFICATION });
+	dispatch({ type: TASK_DELETE_CLEAR_NOTIFICATION });
 };

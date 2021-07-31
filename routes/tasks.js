@@ -111,7 +111,39 @@ router.put("/:id", ensureAuthenticated, async (req, res) => {
 			effectedTask: id,
 		});
 	} catch (err) {
-		res.status(404).json({ text: errMessage, err, effectedTask: id });
+		res.json({ text: errMessage, err, effectedTask: id });
+	}
+});
+
+/**
+ * Deletes a user's task
+ * @DELETE /:id
+ *
+ */
+router.delete("/:id", ensureAuthenticated, async (req, res) => {
+	// Deconstruct request
+	const { id } = req.params;
+
+	// Track errors
+	let errMessage;
+
+	try {
+		// Delete in database
+		errMessage = "Failed to contact database";
+		const response = await Task.findOneAndDelete({
+			userID: req.user._id,
+			_id: ObjectId(id),
+		});
+
+		// Send response
+		res.json({
+			text: "Successfully deleted task",
+			type: "success",
+			deleted: response,
+			effectedTask: id,
+		});
+	} catch (err) {
+		res.json({ text: errMessage, err, effectedTask: id });
 	}
 });
 
