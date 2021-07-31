@@ -17,9 +17,7 @@ const User = require("../models/User");
  * @GET /current
  */
 router.get("/current", (req, res) => {
-	return res
-		.status(404)
-		.json({ id: req.user._id, username: req.user.username });
+	return res.json({ id: req.user._id, username: req.user.username });
 });
 
 /**

@@ -1,7 +1,7 @@
 {
-	"name": "mern-task-list",
+	"name": "task-list-react-redux-passport",
 	"version": "1.0.0",
-	"description": "README testing",
+	"description": "Full-stack task tracking single page application with backend REST API implemented using React, Redux state management, and Passport local authentication",
 	"main": "app.js",
 	"scripts": {
 		"client": "npm start --prefix client",
@@ -10,16 +10,8 @@
 		"start": "node app.js",
 		"heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
 	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/jnarayanbvg/mern-task-list.git"
-	},
 	"author": "",
 	"license": "ISC",
-	"bugs": {
-		"url": "https://github.com/jnarayanbvg/mern-task-list/issues"
-	},
-	"homepage": "https://github.com/jnarayanbvg/mern-task-list#readme",
 	"dependencies": {
 		"bcrypt": "^5.0.1",
 		"cookie-parser": "^1.4.5",
