@@ -26,9 +26,7 @@ const Task = ({ task: { _id, title, date, time, location, completed } }) => {
 
 	const onToggle = () => {
 		setLocalCompleted(!completed);
-		dispatch(
-			updateTask({ id: _id, updatedParameters: { completed: !completed } })
-		);
+		dispatch(updateTask(_id, { completed: !completed }));
 	};
 
 	const [showUpdateTaskModal, setShowUpdateTaskModal] = useState(false);
